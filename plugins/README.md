@@ -1,1 +1,1 @@
-MINI BOT
+mini bot
