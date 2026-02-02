@@ -42,7 +42,7 @@ cmd({
 *║👑 MODE :❯ ${mode}*
 *║👑 UPTIME :❯ ${uptime()}*
 *║👑 PING :❯ ${ping} MS*
-*║👑 PLATFORM :❯ BILAL❮ar.m64❯*
+*║👑 PLATFORM :❯ DR❮ar.m64❯*
 *╚═════════════════╝*
 
 *HI @${sender.split("@")[0]} G 🥰*
@@ -91,57 +91,25 @@ cmd({
 *👑 ClICK HERE FOR HELP 👑*
 
 *👑 DEVELEPER 👑*
-*https://akaserein.github.io/Bilal/*
+*https://minidr-7100b4161de8.herokuapp.com/*
 
 *👑 SUPPORT CHANNEL 👑* 
-*https://whatsapp.com/channel/0029VbBXuGe4yltMLngL582d*
+*https://whatsapp.com/channel/0029VbAhxYY90x2vgwhXJV3O*
 
 *👑 SUPPORT GROUP 👑*
-*https://chat.whatsapp.com/BwWffeDwiqe6cjDDklYJ5m?mode=ems_copy_t*
+*https://chat.whatsapp.com/HiOa8f0G7yHHGjZBUv4iA6?mode=gi_t*
 
-*👑 BILAL-MD WHATSAPP BOT 👑*
+*👑 DR-MD WHATSAPP BOT 👑*
 `;
 
-  // ✅ First Message (Menu Image + Caption)
     await conn.sendMessage(from, {
-      image: { url: config.IMAGE_PATH || "https://files.catbox.moe/kunzpz.png" },
+      image: { url: config.IMAGE_PATH || 'https://files.catbox.moe/g6odib.jpg' },
       caption: customMenu,
       contextInfo: { mentionedJid: [sender] }
     }, { quoted: m });
 
-    // ✅ Second Message (Buttons Separate)
-    await conn.sendMessage(from, {
-      text: "👑 Support Links Buttons 👇",
-      footer: "👑 Bilal MD Support",
-
-      templateButtons: [
-        {
-          index: 1,
-          urlButton: {
-            displayText: "📢 Channel 1",
-            url: "https://whatsapp.com/channel/0029VbAPgH78PgsENxv1Ej43"
-          }
-        },
-        {
-          index: 2,
-          urlButton: {
-            displayText: "📢 Channel 2",
-            url: "https://whatsapp.com/channel/0029VbAfR3Z4CrfrBQe5EX43"
-          }
-        },
-        {
-          index: 3,
-          urlButton: {
-            displayText: "💬 Support Group",
-            url: "https://chat.whatsapp.com/BwWffeDwiqe6cjDDklYJ5m"
-          }
-        }
-      ]
-    }, { quoted: m });
-
   } catch (err) {
-    console.log("❌ MENU ERROR:", err);
-
-    reply("❌ Menu command me error aa gaya!\nCheck console logs.");
+    console.log("MENU ERROR:", err);
+    reply("❌ Error aa gaya");
   }
 });

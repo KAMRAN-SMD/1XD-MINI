@@ -40,7 +40,7 @@ cmd({
     const caption = `*👑 FB VIDEO 👑*
 *👑 TIME :❯ ${result.duration}*
 *👑 CREATER :❯ ${data.creator}*
-*👑 BY :❯ BILAL-MD 👑*`;
+*👑 BY :❯ DR-MD 👑*`;
 
     await conn.sendMessage(
       from,

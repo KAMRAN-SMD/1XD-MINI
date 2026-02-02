@@ -2,7 +2,7 @@ const { cmd } = require('../inconnuboy');
 const axios = require('axios');
 
 cmd({
-  pattern: "song",
+  pattern: "song3",
   react: "😇",
   category: "download",
   filename: __filename
@@ -43,7 +43,7 @@ cmd({
       `*👑 AUDIO INFO 👑*\n\n` +
       `*👑 AUDIO NAME 👑* \n${meta.title}\n\n` +
       `*👑 TIKTOK ID 👑* \n ${meta.author.name}\n\n` +
-      `*👑 TIME 👑* \n ${meta.duration.timestamp}\n\n*👑 BY :❯ BILAL-MD 👑*`
+      `*👑 TIME 👑* \n ${meta.duration.timestamp}\n\n*👑 BY :❯ DR-MD 👑*`
     );
 
     // 🔊 Direct audio

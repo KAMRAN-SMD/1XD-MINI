@@ -30,7 +30,7 @@ cmd({
 *┃ 👑 VER :❯ ${app.file.vername}*
 *╰━━━━━━━━━━━━━━━┈⊷*
 
-*👑 BY :❯ BILAL-MD 👑*`;
+*👑 BY :❯ DR-MD 👑*`;
 
     await conn.sendMessage(from, { image: { url: app.icon }, caption }, { quoted: mek });
 

@@ -10,44 +10,44 @@ function normalizeYouTubeUrl(url) {
 }
 
 /**
- * Fetch Video Link (Jawad-Tech API)
+ * Fetch Audio Link (Aswin-Sparky Koyeb API)
  */
-async function fetchVideoData(url) {
+async function fetchAudioData(url) {
   try {
-    // Aapki specific API endpoint use ho rahi hai
-    const apiUrl = `https://jawad-tech.vercel.app/download/ytdl?url=${encodeURIComponent(url)}`;
+    // Aapki di hui specific API endpoint
+    const apiUrl = `https://api-aswin-sparky.koyeb.app/api/downloader/song?search=${encodeURIComponent(url)}`;
     const { data } = await axios.get(apiUrl);
     
-    // API Response structure ke mutabiq data extract karna
-    if (data.status && data.result) {
-        return data.result.mp4; // Direct MP4 link
+    // API response check: data.status aur data.data.url ke mutabiq
+    if (data.status && data.data && data.data.url) {
+        return data.data.url;
     }
     return null;
   } catch (e) {
-    console.error("API Error:", e.message);
+    console.error("Audio API Error:", e.message);
     return null;
   }
 }
 
-// --- MAIN AUTO VIDEO DOWNLOAD COMMAND ---
+// --- MAIN AUTO AUDIO DOWNLOAD COMMAND ---
 
 cmd(
   {
-    pattern: "video",
-    alias: ["mp4", "ytv", "vdl"],
-    react: "🎥",
-    desc: "Auto Download YouTube Video via Jawad-Tech API.",
+    pattern: "song",
+    alias: ["audio", "mp3", "play"],
+    react: "🎶",
+    desc: "Auto Download YouTube Audio via Koyeb API.",
     category: "download",
     filename: __filename,
   },
   async (conn, mek, m, { from, q, reply, prefix }) => {
     try {
-      if (!q) return reply(`❓ Usage: \`${prefix}video <name/link>\``);
+      if (!q) return reply(`❓ Usage: \`${prefix}song <name/link>\``);
 
-      // Search Start Reaction
+      // Reaction for search start
       await conn.sendMessage(from, { react: { text: "🔍", key: mek.key } });
 
-      // Step 1: Search or Identify URL
+      // Step 1: Search for the video/audio
       let ytdata;
       const url = normalizeYouTubeUrl(q);
       if (url) {
@@ -59,32 +59,34 @@ cmd(
         ytdata = search.videos[0];
       }
 
-      // Metadata Notification
-      const infoMsg = `📥 *Downloading Video...*\n\n📌 *Title:* ${ytdata.title}\n⏱️ *Duration:* ${ytdata.timestamp}\n\n> © Powered by Jawad-Tech API`;
+      // Metadata information
+      const infoMsg = `🎧 *AUDIO DOWNLOADER* 🎧\n\n📌 *Title:* ${ytdata.title}\n⏱️ *Duration:* ${ytdata.timestamp}\n\n> 📥 *Uploading MP3, please wait...*`;
       
       await conn.sendMessage(from, { 
         image: { url: ytdata.thumbnail || ytdata.image }, 
         caption: infoMsg 
       }, { quoted: mek });
 
-      // Step 2: Fetch and Send Video
-      const videoUrl = await fetchVideoData(ytdata.url);
+      // Step 2: Fetch MP3 link from API
+      const audioUrl = await fetchAudioData(ytdata.url);
 
-      if (videoUrl) {
+      if (audioUrl) {
+        // Step 3: Send Audio File
         await conn.sendMessage(from, { 
-          video: { url: videoUrl }, 
-          caption: `✅ *${ytdata.title}*\n\n> © KAMRAN-MD` 
+          audio: { url: audioUrl }, 
+          mimetype: "audio/mpeg",
+          fileName: `${ytdata.title}.mp3`
         }, { quoted: mek });
         
         // Success Reaction
         await conn.sendMessage(from, { react: { text: "✅", key: mek.key } });
       } else {
-        reply("❌ Sorry, I couldn't download the video from this API.");
+        reply("❌ Could not retrieve audio from the API. Please try another link.");
       }
 
     } catch (e) {
       console.error(e);
-      reply("⚠️ System Error: Video processing failed.");
+      reply("⚠️ System Error: Audio processing failed.");
     }
   }
 );
