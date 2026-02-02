@@ -30,33 +30,33 @@ cmd({
 *║⚡ MODE      : ${config.WORK_TYPE?.toUpperCase() || "PUBLIC"}*
 *╚══════════════════════╝*
 
-👑 *BILAL-MD BOT ACTIVE* 👑
+👑 *KAMRAN-MD BOT ACTIVE* 👑
 `;
 
     // Send Ping Reply
     await conn.sendMessage(from, {
       text: pingMsg,
-      footer: "👑 Bilal MD Support",
+      footer: "👑 KAMRAN MD Support",
       templateButtons: [
         {
           index: 1,
           urlButton: {
             displayText: "📢 Channel 1",
-            url: "https://whatsapp.com/channel/0029VbAPgH78PgsENxv1Ej43"
+            url: "https://whatsapp.com/channel/0029VbAhxYY90x2vgwhXJV3O"
           }
         },
         {
           index: 2,
           urlButton: {
             displayText: "📢 Channel 2",
-            url: "https://whatsapp.com/channel/0029VbAfR3Z4CrfrBQe5EX43"
+            url: "https://whatsapp.com/channel/0029VbAhxYY90x2vgwhXJV3O"
           }
         },
         {
           index: 3,
           urlButton: {
             displayText: "💬 Support Group",
-            url: "https://chat.whatsapp.com/BwWffeDwiqe6cjDDklYJ5m"
+            url: "https://chat.whatsapp.com/HiOa8f0G7yHHGjZBUv4iA6?mode=gi_t"
           }
         }
       ]
