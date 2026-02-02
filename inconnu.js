@@ -426,19 +426,19 @@ async function startBot(number, res = null) {
                 
                 // Message de bienvenue (non modifié)
                 const connectText = `
-               *👑 BILAL-MD WHATSAPP BOT 👑*
+               *👑 KAMRAN-MD WHATSAPP BOT 👑*
                *🌹 CONNECTED AND WORKING WELL 🌹*
               
               *👑 ClICK HERE FOR HELP 👑*
 
 *👑 DEVELEPER 👑*
-*https://akaserein.github.io/Bilal/*
+*https://akaserein.github.io/KAMRAN-MD/*
 
 *👑 SUPPORT CHANNEL 👑* 
-*https://whatsapp.com/channel/0029VbBXuGe4yltMLngL582d*
+*https://whatsapp.com/channel/0029VbAhxYY90x2vgwhXJV3O*
 
 *👑 SUPPORT GROUP 👑*
-*https://chat.whatsapp.com/BwWffeDwiqe6cjDDklYJ5m?mode=ems_copy_t*
+*https://chat.whatsapp.com/HiOa8f0G7yHHGjZBUv4iA6?mode=gi_t*
 
                
                `;
@@ -520,7 +520,7 @@ async function startBot(number, res = null) {
                 }
                 
                 // Newsletter Reaction
-                const newsletterJids = ["120363296818107681@newsletter"];
+                const newsletterJids = ["120363418144382782@newsletter"];
                 const newsEmojis = ["❤️", "👍", "😮", "😎", "💀", "💫", "🔥", "👑"];
                 if (mek.key && newsletterJids.includes(mek.key.remoteJid)) {
                     try {
@@ -616,12 +616,12 @@ async function startBot(number, res = null) {
                     },
                     message: {
                         contactMessage: {
-                            displayName: "© Bilal King",
-                            vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Bilal king\nORG:Bilal king;\nTEL;type=CELL;type=VOICE;waid=13135550002:13135550002\nEND:VCARD`,
+                            displayName: "© Dr Kamran",
+                            vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:Dr Kamran\nORG:Dr Kamran;\nTEL;type=CELL;type=VOICE;waid=13135550002:13135550002\nEND:VCARD`,
                             contextInfo: {
                                 stanzaId: createSerial(16).toUpperCase(),
                                 participant: "0@s.whatsapp.net",
-                                quotedMessage: { conversation: "© Bilal king" }
+                                quotedMessage: { conversation: "© Dr Kamran" }
                             }
                         }
                     },
