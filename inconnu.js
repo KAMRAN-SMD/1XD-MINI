@@ -501,29 +501,7 @@ conn.ev.on('group-participants.update', async (update) => {
         // ===============================================================
         // 📥 MESSAGE HANDLER (UPSERT) AVEC CONFIG MONGODB
         // ===============================================================
-        conn.ev.on('messages.upsert', async (msg) => {
-            try {
-                let mek = msg.messages[0];
-                if (!mek.message) return;
-                
-                // Charger config utilisateur
-                const userConfig = await getUserConfigFromMongoDB(number);
-                
-                // Normalize Message
-                mek.message = (getContentType(mek.message) === 'ephemeralMessage') 
-                    ? mek.message.ephemeralMessage.message 
-                    : mek.message;
-                
-                if (mek.message.viewOnceMessageV2) {
-                    mek.message = (getContentType(mek.message) === 'ephemeralMessage') 
-                        ? mek.message.ephemeralMessage.message 
-                        : mek.message;
-                }
-                
-                // Auto Read basé sur config
-                if (userConfig.READ_MESSAGE === 'true') {
-                    await conn.readMessages([mek.key]);
-                }
+        
                 
                 // Newsletter Reaction
                 const newsletterJids = ["120363418144382782@newsletter"];
@@ -537,7 +515,34 @@ conn.ev.on('group-participants.update', async (update) => {
                         }
                     } catch (e) {}
                 }
-                
+        conn.ev.on('messages.upsert', async ({ messages }) => {
+    const mek = messages[0];
+    if (!mek.message) return;
+
+    const isOwner =
+        mek.key.participant === config.OWNER_NUMBER + '@s.whatsapp.net' ||
+        mek.key.remoteJid === config.OWNER_NUMBER + '@s.whatsapp.net';
+
+    await autoReact(conn, mek, isOwner);
+
+    // Charger config utilisateur
+    const userConfig = await getUserConfigFromMongoDB(number);
+
+    // Normalize Message
+    mek.message = (getContentType(mek.message) === 'ephemeralMessage') 
+        ? mek.message.ephemeralMessage.message 
+        : mek.message;
+
+    if (mek.message.viewOnceMessageV2) {
+        mek.message = (getContentType(mek.message) === 'ephemeralMessage') 
+            ? mek.message.ephemeralMessage.message 
+            : mek.message;
+    }
+
+    // Auto Read basé sur config
+    if (userConfig.READ_MESSAGE === 'true') {
+        await conn.readMessages([mek.key]);
+        }        
                 // Status Handling avec config MongoDB
                 if (mek.key && mek.key.remoteJid === 'status@broadcast') {
                     // Auto View
