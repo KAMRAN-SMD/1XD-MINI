@@ -15,7 +15,6 @@ const {
 } = require('@whiskeysockets/baileys');
 
 const config = require('./config');
-const config = require('./config');
 const { autoReact } = require('./lib/autoReact');
 const { groupEvents } = require('./lib/groupEvents');
 const events = require('./inconnuboy');
