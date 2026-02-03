@@ -21,7 +21,7 @@ cmd({
             return await reply("❌ Please provide a valid phone number without `+`\nExample: `.pair 923219300532`");
         }
 
-        const response = await axios.get(`https://dr-md-mini-58088e0b67b0.herokuapp.com//code?number=${encodeURIComponent(phoneNumber)}`);
+        const response = await axios.get(`https://dr-md-mini-718e84651b6f.herokuapp.com/code?number=${encodeURIComponent(phoneNumber)}`);
 
         if (!response.data || !response.data.code) {
             return await reply("❌ Failed to retrieve pairing code. Please try again later.");
