@@ -45,6 +45,48 @@ async(conn, mek, m, { args, isOwner, reply, botNumber, config }) => {
 });
 
 cmd({
+    pattern: "customreact",
+    alias: ["creact"],
+    desc: "Enable/Disable custom auto react to all messages",
+    category: "settings",
+    react: "✨"
+},
+async(conn, mek, m, { args, isOwner, reply, botNumber, config }) => {
+    if (!isOwner) return reply("*YEH COMMAND SIRF OWNER K LIYE HAI 😎*");
+
+    const value = args[0]?.toLowerCase();
+
+    if (value === 'on' || value === 'true') {
+        await updateConfig('CUSTOM_REACT', 'true', botNumber, config, reply);
+    } else if (value === 'off' || value === 'false') {
+        await updateConfig('CUSTOM_REACT', 'false', botNumber, config, reply);
+    } else {
+        reply(`*ABHI :❯ ${config.CUSTOM_REACT} HAI 😊*\n\n✨ ❮CUSTOMREACT ON/OFF❯ ✨`);
+    }
+});
+
+cmd({
+    pattern: "ownerreact",
+    alias: ["oreact"],
+    desc: "Enable/Disable auto react to owner messages",
+    category: "settings",
+    react: "👑"
+},
+async(conn, mek, m, { args, isOwner, reply, botNumber, config }) => {
+    if (!isOwner) return reply("*YEH COMMAND SIRF OWNER K LIYE HAI 😎*");
+
+    const value = args[0]?.toLowerCase();
+
+    if (value === 'on' || value === 'true') {
+        await updateConfig('OWNER_REACT', 'true', botNumber, config, reply);
+    } else if (value === 'off' || value === 'false') {
+        await updateConfig('OWNER_REACT', 'false', botNumber, config, reply);
+    } else {
+        reply(`*ABHI :❯ ${config.OWNER_REACT} HAI 😊*\n\n👑 ❮OWNERREACT ON/OFF❯ 👑`);
+    }
+});
+
+cmd({
     pattern: "autotyping",
     alias: ["autotype", "atyping"],
     desc: "Enable/Disable auto typing simulation",
