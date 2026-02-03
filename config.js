@@ -22,8 +22,6 @@ OWNER_NUMBER: process.env.OWNER_NUMBER || '923219300532',
 OWNER_REACT: ['👑','🔥','❤️','💎'],
 CUSTOM_REACT: ['🌸','💜','✨','🥰','⚡','😻','💫','🫶'],
 
-TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID || '923219300532',
-
 BOT_NAME: "BILAL MD",
 BOT_FOOTER: '© ᴘᴏᴡᴇʀᴇᴅ ʙʏ bilal',
 
