@@ -1,5 +1,5 @@
 const config = require('../config');
-const { cmd } = require('../command');
+const { cmd } = require('../inconnuboy');
 const axios = require('axios');
 const converter = require('../data/converter');
 
