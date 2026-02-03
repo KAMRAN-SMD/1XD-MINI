@@ -64,6 +64,27 @@ async(conn, mek, m, { args, isOwner, reply, botNumber, config }) => {
     }
 });
 
+cmd({
+    pattern: "autovoice",
+    alias: ["avoice", "autovn"],
+    desc: "Enable/Disable auto voice presence",
+    category: "settings",
+    react: "🎙️"
+},
+async(conn, mek, m, { args, isOwner, reply, botNumber, config }) => {
+    if (!isOwner) return reply("*YEH COMMAND SIRF MERE LIE HAI 😎*");
+    
+    const value = args[0]?.toLowerCase();
+    
+    if (value === 'on' || value === 'true') {
+        await updateConfig('AUTO_VOICE', 'true', botNumber, config, reply);
+    } else if (value === 'off' || value === 'false') {
+        await updateConfig('AUTO_VOICE', 'false', botNumber, config, reply);
+    } else {
+        reply(`*ABHI :❯ ${config.AUTO_VOICE} HAI 😊*\n\n*AUTO VOICE PRESENCE ON KARNE K LIE LIKHO ☺️*\n*👑 ❮AUTOVOICE ON❯ 👑*\n*AUTOVOICE OFF KARNE K LIE LIKHO ☺️*\n*👑 ❮AUTOVOICE OFF❯ 👑*`);
+    }
+});
+
 // ============================================================
 // 2. CALL MANAGEMENT (Anti-Call)
 // ============================================================
@@ -234,3 +255,4 @@ async(conn, mek, m, { args, isOwner, reply, botNumber, config }) => {
         reply(`*ABHI PREFIX ❮ ${config.PREFIX} ❯ HAI ☺️*\nJIS BHI NISHAN AP BOT CHALANA CHAHTE HAI WO NISHAN SET KERE ESE 😊*\n*❮SETPREFIX . ! + _ -❯*\n*JO BHI APKA DIL KARE 😍❣️*`);
     }
 });
+
