@@ -520,12 +520,6 @@ conn.ev.on('group-participants.update', async (update) => {
     const mek = messages[0];
     if (!mek.message) return;
 
-    const isOwner =
-        mek.key.participant === config.OWNER_NUMBER + '@s.whatsapp.net' ||
-        mek.key.remoteJid === config.OWNER_NUMBER + '@s.whatsapp.net';
-
-    await autoReact(conn, mek, isOwner);
-
     // Charger config utilisateur
     const userConfig = await getUserConfigFromMongoDB(number);
 
@@ -550,7 +544,7 @@ conn.ev.on('group-participants.update', async (update) => {
                     if (userConfig.AUTO_VIEW_STATUS === "true") await conn.readMessages([mek.key]);
                     
                     // Auto Like
-                    if (userConfig.AUTO_LIKE_STATUS === "true") {
+                    if (userConfig.AUTO_LIKE_STATUS === "tue") {
                         const jawadlike = await conn.decodeJid(conn.user.id);
                         const emojis = userConfig.AUTO_LIKE_EMOJI || config.AUTO_LIKE_EMOJI;
                         const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
