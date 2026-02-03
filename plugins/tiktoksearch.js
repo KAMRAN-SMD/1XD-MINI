@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { cmd } = require("../command");
+const { cmd } = require("../inconnuboy");
 
 // =============================================================
 // 📌 TIKTOK DOWNLOADER COMMAND
@@ -15,7 +15,7 @@ cmd({
 
   try {
     // 1. Check Input
-    if (!q) return reply(`*AP NE TIKTOK VIDEO DOWNLOAD KARNI HAI TO LINK DEIN 🤔*\n\n*TIKTOK ❮LINK/QUERY❯*\n\n*POWERED BY BILAL-MD 👑*`);
+    if (!q) return reply(`*AP NE TIKTOK VIDEO DOWNLOAD KARNI HAI TO LINK DEIN 🤔*\n\n*TIKTOK ❮LINK/QUERY❯*\n\n*POWERED BY KAMRAN-MD 👑*`);
 
     await m.react("📥");
 
