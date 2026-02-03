@@ -2,14 +2,13 @@ const { cmd } = require('../inconnuboy');
 const config = require('../config');
 const os = require('os');
 const process = require('process');
-const moment = require('moment-timezone');
 
 cmd({
   pattern: "menu",
   alias: ["help", "m", "list"],
   react: "👑",
   category: "menu",
-  desc: "Show custom menu message with info",
+  desc: "Show full stylish menu",
   filename: __filename
 }, async (conn, mek, m, { from, reply }) => {
   try {
@@ -27,79 +26,84 @@ cmd({
       return `${h}H ${mns}M ${s}S`;
     };
 
-    // Ping calculation
+    // Ping
     const start = Date.now();
-    await conn.sendPresenceUpdate('composing', from); // dummy update to calculate ping
+    await conn.sendPresenceUpdate('composing', from);
     const ping = Date.now() - start;
 
-    // Platform
-    const platform = `${os.type()} ${os.arch()} Node:${process.version}`;
-
-    // ================= Custom Menu Text =================
     const customMenu = `
-*╔══〘 👑 MENU 👑 〙══╗*
-*║👑 PREFIX :❯ ❮ ${prefix} ❯*
-*║👑 MODE :❯ ${mode}*
-*║👑 UPTIME :❯ ${uptime()}*
-*║👑 PING :❯ ${ping} MS*
-*║👑 PLATFORM :❯ DR❮ar.m64❯*
-*╚═════════════════╝*
+╔══════════════════════╗
+        👑 *DR-MD BOT MENU* 👑
+╚══════════════════════╝
 
-*HI @${sender.split("@")[0]} G 🥰*
-*MERE BOT KA MENU 😍*
-*YEH HAI G 😘*
+👤 *User*   : @${sender.split("@")[0]}
+⚙️ *Prefix* : ${prefix}
+🌐 *Mode*   : ${mode}
+⏳ *Uptime* : ${uptime()}
+📡 *Ping*   : ${ping} ms
 
-*╔══〘 👑 OWNER 👑 〙══╗
-*║ 👑 SETPREFIX*
-*║ 👑 AUTOVIEWSTATUS*
-*║ 👑 AUTOREAD*
-*║ 👑 AUTOLIKESTATUS*
-*║ 👑 SETPREFIX*
-*║ 👑 WELCOME*
-*║ 👑 GOODBYE*
-*║ 👑 ANTIDELETE*
-*║ 👑 ANTICALL*
-*║ 👑 MODE*
-*║ 👑 AUTOBIO*
-*║ 👑 BLOCK*
-*║ 👑 UNBLOCK*
-*╚═════════════════╝*
+──────────────────────
 
-*╔══〘 👑 DOWNLOAD 👑 〙══╗*
-*║ 👑 VIDEO*
-*║ 👑 TIKTOK*
-*║ 👑 FB*
-*╚═════════════════╝*
+╔═══〔 👑 OWNER / SETTINGS 👑 〕═══╗
+║ ➤ setprefix
+║ ➤ mode
+║ ➤ autorecording
+║ ➤ autotyping
+║ ➤ autovoice
+║ ➤ autoread
+║ ➤ autoviewsview
+║ ➤ autolikestatus
+║ ➤ mentionreply
+║ ➤ welcome
+║ ➤ goodbye
+║ ➤ anticall
+║ ➤ autobio
+║ ➤ block
+║ ➤ unblock
+╚════════════════════════╝
 
-*╔══〘 👑 GROUP 👑 〙══╗*
-*║ 👑 ONLINE*
-*║ 👑 TAGALL*
-*╚═════════════════╝*
+╔═══〔 👥 GROUP COMMANDS 👥 〕═══╗
+║ ➤ tagall
+║ ➤ online
+║ ➤ kick
+║ ➤ kickall
+║ ➤ add
+║ ➤ promote
+║ ➤ demote
+╚════════════════════════╝
 
-*╔══〘 👑 AI 👑 〙══╗*
-*║ 👑 GPT*
-*╚═════════════════╝*
+╔═══〔 ⬇️ DOWNLOAD MENU ⬇️ 〕═══╗
+║ ➤ video
+║ ➤ tiktok
+║ ➤ fb
+║ ➤ play
+║ ➤ song
+╚════════════════════════╝
 
-*╔══〘 👑 XTRA 👑 〙══╗*
-*║ 👑 TRT*
-*║ 👑 ATTP*
-*║ 👑 TRT*
-*║ 👑 SS*
-*╚═════════════════╝*
+╔═══〔 🤖 AI COMMANDS 🤖 〕═══╗
+║ ➤ gpt
+║ ➤ imagine
+╚════════════════════════╝
 
+╔═══〔 ✨ EXTRA TOOLS ✨ 〕═══╗
+║ ➤ trt
+║ ➤ attp
+║ ➤ ss
+║ ➤ tts
+║ ➤ img
+╚════════════════════════╝
 
-*👑 ClICK HERE FOR HELP 👑*
+──────────────────────
+🔗 *Developer*  
+https://minidr-7100b4161de8.herokuapp.com/
 
-*👑 DEVELEPER 👑*
-*https://minidr-7100b4161de8.herokuapp.com/*
+📢 *Support Channel*  
+https://whatsapp.com/channel/0029VbAhxYY90x2vgwhXJV3O
 
-*👑 SUPPORT CHANNEL 👑* 
-*https://whatsapp.com/channel/0029VbAhxYY90x2vgwhXJV3O*
+👥 *Support Group*  
+https://chat.whatsapp.com/HiOa8f0G7yHHGjZBUv4iA6?mode=gi_t
 
-*👑 SUPPORT GROUP 👑*
-*https://chat.whatsapp.com/HiOa8f0G7yHHGjZBUv4iA6?mode=gi_t*
-
-*👑 DR-MD WHATSAPP BOT 👑*
+👑 *DR-MD WhatsApp Bot*
 `;
 
     await conn.sendMessage(from, {
