@@ -13,20 +13,15 @@ module.exports = {
     MONGODB_URI: process.env.MONGODB_URI || 'mongodb+srv://doctorkamran:9jwdkCzXFENMYX9Y@cluster0.wqbn9o4.mongodb.net/?appName=Cluster0',
     
     // ===========================================================
-// 2. INFORMATIONS DU BOT
-// ===========================================================
-PREFIX: process.env.PREFIX || '.',
-OWNER_NUMBER: process.env.OWNER_NUMBER || '923219300532',
-
-// AUTO REACT
-OWNER_REACT: ['👑','🔥','❤️','💎'],
-CUSTOM_REACT: ['🌸','💜','✨','🥰','⚡','😻','💫','🫶'],
-
-BOT_NAME: "BILAL MD",
-BOT_FOOTER: '© ᴘᴏᴡᴇʀᴇᴅ ʙʏ bilal',
-
-// Mode de travail : public, private, group, inbox
-WORK_TYPE: process.env.WORK_TYPE || "public", 
+    // 2. INFORMATIONS DU BOT
+    // ===========================================================
+    PREFIX: process.env.PREFIX || '.',
+    OWNER_NUMBER: process.env.OWNER_NUMBER || '+923219300532', // Mettez votre numéro ici
+    BOT_NAME: "BILAL MD",
+    BOT_FOOTER: '© ᴘᴏᴡᴇʀᴇᴅ ʙʏ bilal',
+    
+    // Mode de travail : public, private, group, inbox
+    WORK_TYPE: process.env.WORK_TYPE || "public", 
     
     // ===========================================================
     // 3. FONCTIONNALITÉS AUTOMATIQUES (STATUTS)
@@ -76,4 +71,5 @@ WORK_TYPE: process.env.WORK_TYPE || "public",
     TELEGRAM_CHAT_ID: process.env.  TELEGRAM_CHAT_ID || '+923219300532'
     
 };
-  
+
+        
