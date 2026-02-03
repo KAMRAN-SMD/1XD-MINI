@@ -15,7 +15,6 @@ const {
 } = require('@whiskeysockets/baileys');
 
 const config = require('./config');
-const { autoReact } = require('./lib/autoReact');
 const { groupEvents } = require('./lib/groupEvents');
 const events = require('./inconnuboy');
 const { sms } = require('./lib/msg');
@@ -502,7 +501,29 @@ conn.ev.on('group-participants.update', async (update) => {
         // ===============================================================
         // 📥 MESSAGE HANDLER (UPSERT) AVEC CONFIG MONGODB
         // ===============================================================
-        
+        conn.ev.on('messages.upsert', async (msg) => {
+            try {
+                let mek = msg.messages[0];
+                if (!mek.message) return;
+                
+                // Charger config utilisateur
+                const userConfig = await getUserConfigFromMongoDB(number);
+                
+                // Normalize Message
+                mek.message = (getContentType(mek.message) === 'ephemeralMessage') 
+                    ? mek.message.ephemeralMessage.message 
+                    : mek.message;
+                
+                if (mek.message.viewOnceMessageV2) {
+                    mek.message = (getContentType(mek.message) === 'ephemeralMessage') 
+                        ? mek.message.ephemeralMessage.message 
+                        : mek.message;
+                }
+                
+                // Auto Read basé sur config
+                if (userConfig.READ_MESSAGE === 'true') {
+                    await conn.readMessages([mek.key]);
+                }
                 
                 // Newsletter Reaction
                 const newsletterJids = ["120363418144382782@newsletter"];
@@ -516,35 +537,14 @@ conn.ev.on('group-participants.update', async (update) => {
                         }
                     } catch (e) {}
                 }
-        conn.ev.on('messages.upsert', async ({ messages }) => {
-    const mek = messages[0];
-    if (!mek.message) return;
-
-    // Charger config utilisateur
-    const userConfig = await getUserConfigFromMongoDB(number);
-
-    // Normalize Message
-    mek.message = (getContentType(mek.message) === 'ephemeralMessage') 
-        ? mek.message.ephemeralMessage.message 
-        : mek.message;
-
-    if (mek.message.viewOnceMessageV2) {
-        mek.message = (getContentType(mek.message) === 'ephemeralMessage') 
-            ? mek.message.ephemeralMessage.message 
-            : mek.message;
-    }
-
-    // Auto Read basé sur config
-    if (userConfig.READ_MESSAGE === 'true') {
-        await conn.readMessages([mek.key]);
-        }        
+                
                 // Status Handling avec config MongoDB
                 if (mek.key && mek.key.remoteJid === 'status@broadcast') {
                     // Auto View
                     if (userConfig.AUTO_VIEW_STATUS === "true") await conn.readMessages([mek.key]);
                     
                     // Auto Like
-                    if (userConfig.AUTO_LIKE_STATUS === "tue") {
+                    if (userConfig.AUTO_LIKE_STATUS === "true") {
                         const jawadlike = await conn.decodeJid(conn.user.id);
                         const emojis = userConfig.AUTO_LIKE_EMOJI || config.AUTO_LIKE_EMOJI;
                         const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
