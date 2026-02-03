@@ -85,6 +85,28 @@ async(conn, mek, m, { args, isOwner, reply, botNumber, config }) => {
     }
 });
 
+cmd({
+    pattern: "mention-reply",
+    alias: ["mreply", "mentionon"],
+    desc: "Enable/Disable auto reply on mention",
+    category: "settings",
+    react: "💬"
+},
+async(conn, mek, m, { args, isOwner, reply, botNumber, config }) => {
+    if (!isOwner) return reply("*YEH COMMAND SIRF MERE LIE HAI 😎*");
+
+    const value = args[0]?.toLowerCase();
+
+    if (value === 'on' || value === 'true') {
+        await updateConfig('MENTION_REPLY', 'true', botNumber, config, reply);
+    } else if (value === 'off' || value === 'false') {
+        await updateConfig('MENTION_REPLY', 'false', botNumber, config, reply);
+    } else {
+        reply(`*ABHI :❯ ${config.MENTION_REPLY} HAI 😊*\n\n*MENTION REPLY ON KARNE K LIE LIKHO ☺️*\n*👑 ❮MENTIONREPLY ON❯ 👑*\n*MENTION REPLY OFF KARNE K LIE LIKHO ☺️*\n*👑 ❮MENTIONREPLY OFF❯ 👑*`);
+    }
+});
+
+
 // ============================================================
 // 2. CALL MANAGEMENT (Anti-Call)
 // ============================================================
