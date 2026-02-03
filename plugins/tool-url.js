@@ -3,7 +3,7 @@ const FormData = require('form-data');
 const fs = require('fs');
 const os = require('os');
 const path = require("path");
-const { cmd, commands } = require("../command");
+const { cmd, commands } = require("../inconnuboy");
 
 cmd({
   'pattern': "tourl",
