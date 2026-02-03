@@ -342,13 +342,11 @@ async function startBot(number, res = null) {
         store.bind(conn.ev);
         
         // 4. Setup handlers
-        setupMessageHandlers(conn, number);
-        setupCallHandlers(conn, number);
-        setupAutoRestart(conn, number); // Configure l'autoreconnect
+setupMessageHandlers(conn, number);
+setupCallHandlers(conn, number);
+setupAutoRestart(conn, number); // Configure l'autoreconnect
 
-        // ================== GROUP WELCOME / GOODBYE ==================
-const { groupEvents } = require('./groupEvents');
-
+// ================= GROUP WELCOME / GOODBYE =================
 conn.ev.on('group-participants.update', async (update) => {
     await groupEvents(conn, update);
 });
