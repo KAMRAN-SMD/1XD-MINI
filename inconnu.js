@@ -345,7 +345,14 @@ async function startBot(number, res = null) {
         setupMessageHandlers(conn, number);
         setupCallHandlers(conn, number);
         setupAutoRestart(conn, number); // Configure l'autoreconnect
-        
+
+        // ================== GROUP WELCOME / GOODBYE ==================
+const { groupEvents } = require('./groupEvents');
+
+conn.ev.on('group-participants.update', async (update) => {
+    await groupEvents(conn, update);
+});
+
         // 5. UTILS ATTACHED TO CONN (non modifié)
         conn.decodeJid = jid => {
             if (!jid) return jid;
