@@ -1,93 +1,116 @@
-const { cmd } = require("../inconnuboy");
-const yts = require("yt-search");
 const axios = require("axios");
+const yts = require("yt-search");
+const { cmd } = require("../inconnuboy");
+const converter = require("../data/converter");
 
-// --- Helper Functions ---
+const commands = ["play", "song2", "ytmp3"];
 
-function normalizeYouTubeUrl(url) {
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/.*[?&]v=)([a-zA-Z0-9_-]{11})/);
-  return match ? `https://youtube.com/watch?v=${match[1]}` : null;
-}
-
-/**
- * Fetch Audio Link (Aswin-Sparky Koyeb API)
- */
-async function fetchAudioData(url) {
-  try {
-    // Aapki di hui specific API endpoint
-    const apiUrl = `https://api-aswin-sparky.koyeb.app/api/downloader/song?search=${encodeURIComponent(url)}`;
-    const { data } = await axios.get(apiUrl);
-    
-    // API response check: data.status aur data.data.url ke mutabiq
-    if (data.status && data.data && data.data.url) {
-        return data.data.url;
-    }
-    return null;
-  } catch (e) {
-    console.error("Audio API Error:", e.message);
-    return null;
-  }
-}
-
-// --- MAIN AUTO AUDIO DOWNLOAD COMMAND ---
-
-cmd(
-  {
-    pattern: "song",
-    alias: ["audio", "mp3", "play"],
+commands.forEach(command => {
+  cmd({
+    pattern: command,
+    desc: "Download audio using song name only (Links blocked)",
+    category: "downloader",
     react: "🎶",
-    desc: "Auto Download YouTube Audio via Koyeb API.",
-    category: "download",
-    filename: __filename,
-  },
-  async (conn, mek, m, { from, q, reply, prefix }) => {
+    filename: __filename
+  }, async (conn, mek, m, { from, q, reply }) => {
     try {
-      if (!q) return reply(`❓ Usage: \`${prefix}song <name/link>\``);
+      if (!q) return reply("❌ Please provide a song name.");
 
-      // Reaction for search start
-      await conn.sendMessage(from, { react: { text: "🔍", key: mek.key } });
+      const isLink = /^(https?:\/\/)/i.test(q);
+      if (isLink) return reply("❌ Only song name is allowed. Links are blocked.");
 
-      // Step 1: Search for the video/audio
-      let ytdata;
-      const url = normalizeYouTubeUrl(q);
-      if (url) {
-        const results = await yts({ videoId: url.split('v=')[1] });
-        ytdata = results;
-      } else {
-        const search = await yts(q);
-        if (!search.videos.length) return reply("❌ No results found!");
-        ytdata = search.videos[0];
+      const search = await yts(q);
+      if (!search.videos.length) return reply("❌ No results found.");
+
+      const video = search.videos[0];
+      const ytUrl = video.url;
+
+      const apiUrl = `https://sarkar-apis.bandaheali.site/download/ytmp3?url=${encodeURIComponent(ytUrl)}`;
+      const res = await axios.get(apiUrl);
+
+      if (!res.data || !res.data.success) {
+        return reply("❌ Failed to fetch audio.");
       }
 
-      // Metadata information
-      const infoMsg = `🎧 *AUDIO DOWNLOADER* 🎧\n\n📌 *Title:* ${ytdata.title}\n⏱️ *Duration:* ${ytdata.timestamp}\n\n> 📥 *Uploading MP3, please wait...*`;
-      
-      await conn.sendMessage(from, { 
-        image: { url: ytdata.thumbnail || ytdata.image }, 
-        caption: infoMsg 
+      const data = res.data.result;
+      const downloadUrl = data.download_url;
+
+      const preDownload = axios.get(downloadUrl, {
+        responseType: "arraybuffer"
+      });
+
+      const stylishMsg = `*${data.title}*
+
+👤 *Channel:* ${video.author.name}
+⏳ *Duration:* ${Math.floor(data.duration / 60)}:${data.duration % 60}
+💽 *Size:* ${data.size}
+◈╼╼╼╼╼╼╼╼╼╼╼╼╼╼╼◈
+  *sᴇʟᴇᴄᴛ ᴅᴏᴡɴʟᴏᴀᴅ ғᴏʀᴍᴀᴛ*
+  
+  (𝟷) ▷ *ᴀᴜᴅɪᴏ* 🎶
+  (𝟸) ▷ *ᴅᴏᴄᴜᴍᴇɴᴛ* 📁
+  (𝟹) ▷ *ᴠᴏɪᴄᴇ ɴᴏᴛᴇ* 🎙️
+◈╼╼╼╼╼╼╼╼╼╼╼╼╼╼╼◈
+
+> *⚡ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅʀ-ᴍᴅ-ᴍɪɴɪ⚡*`;
+
+      const sentMsg = await conn.sendMessage(from, {
+        image: { url: data.thumbnail },
+        caption: stylishMsg
       }, { quoted: mek });
 
-      // Step 2: Fetch MP3 link from API
-      const audioUrl = await fetchAudioData(ytdata.url);
+      const messageListener = async (msgUpdate) => {
+        const msg = msgUpdate.messages[0];
+        if (!msg.message?.extendedTextMessage) return;
 
-      if (audioUrl) {
-        // Step 3: Send Audio File
-        await conn.sendMessage(from, { 
-          audio: { url: audioUrl }, 
-          mimetype: "audio/mpeg",
-          fileName: `${ytdata.title}.mp3`
-        }, { quoted: mek });
-        
-        // Success Reaction
-        await conn.sendMessage(from, { react: { text: "✅", key: mek.key } });
-      } else {
-        reply("❌ Could not retrieve audio from the API. Please try another link.");
-      }
+        const userText = msg.message.extendedTextMessage.text.trim();
+        const isReply =
+          msg.message.extendedTextMessage.contextInfo.stanzaId === sentMsg.key.id;
+
+        if (!isReply) return;
+
+        await conn.sendMessage(from, {
+          react: { text: "⏳", key: msg.key }
+        });
+
+        const response = await preDownload;
+        const buffer = Buffer.from(response.data);
+
+        if (userText === "1") {
+          await conn.sendMessage(from, {
+            audio: buffer,
+            mimetype: "audio/mpeg",
+            fileName: `${data.title}.mp3`
+          }, { quoted: msg });
+        } 
+        else if (userText === "2") {
+          await conn.sendMessage(from, {
+            document: buffer,
+            mimetype: "audio/mpeg",
+            fileName: `${data.title}.mp3`
+          }, { quoted: msg });
+        } 
+        else if (userText === "3") {
+          const ptt = await converter.toPTT(buffer, "mp3");
+          await conn.sendMessage(from, {
+            audio: ptt,
+            mimetype: "audio/ogg; codecs=opus",
+            ptt: true
+          }, { quoted: msg });
+        }
+
+        conn.ev.off("messages.upsert", messageListener);
+      };
+
+      conn.ev.on("messages.upsert", messageListener);
+
+      setTimeout(() => {
+        conn.ev.off("messages.upsert", messageListener);
+      }, 120000);
 
     } catch (e) {
-      console.error(e);
-      reply("⚠️ System Error: Audio processing failed.");
+      console.log(e);
+      reply("❌ An error occurred.");
     }
-  }
-);
-
+  });
+});
