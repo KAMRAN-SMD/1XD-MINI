@@ -1,4 +1,5 @@
 const { cmd } = require('../inconnuboy')
+const { downloadContentFromMessage } = require('@whiskeysockets/baileys')
 
 cmd({
     pattern: "vv",
@@ -14,54 +15,46 @@ async (conn, mek, m, { from, isCreator, reply }) => {
             return reply("*YEH COMMAND SIRF BOT OWNER KE LIYE HAI 😎*")
 
         if (!m.quoted)
-            return reply(
-                "*🥺 KISI VIEW ONCE PHOTO / VIDEO / AUDIO KO REPLY KARO*\n\n" +
-                "*Phir likho:* `.vv`\n\n" +
-                "*Phir dekho kamal 😎*"
-            )
+            return reply("*🥺 View Once media ko reply karo phir `.vv` likho*")
 
-        // 🔥 VIEW ONCE FIX
         let quoted = m.quoted
         let msg = quoted.message
 
+        // 🔥 unwrap viewOnce
         if (msg?.viewOnceMessageV2) {
             msg = msg.viewOnceMessageV2.message
+        } else if (msg?.viewOnceMessage) {
+            msg = msg.viewOnceMessage.message
         } else if (msg?.viewOnceMessageV2Extension) {
             msg = msg.viewOnceMessageV2Extension.message
         }
 
         const type = Object.keys(msg)[0]
-        const buffer = await quoted.download()
+        const media = msg[type]
 
-        let content = {}
+        // ✅ real download
+        const stream = await downloadContentFromMessage(media, type.replace('Message', ''))
+        let buffer = Buffer.from([])
 
-        if (type === "imageMessage") {
-            content = {
-                image: buffer,
-                caption: quoted.text || ""
-            }
-        } 
-        else if (type === "videoMessage") {
-            content = {
-                video: buffer,
-                caption: quoted.text || ""
-            }
-        } 
-        else if (type === "audioMessage") {
-            content = {
-                audio: buffer,
-                mimetype: "audio/mp4",
-                ptt: false
-            }
-        } 
-        else {
-            return reply("*❌ YE VIEW ONCE MEDIA SUPPORT NAHI KARTA 🥺*")
+        for await (const chunk of stream) {
+            buffer = Buffer.concat([buffer, chunk])
         }
 
-        await conn.sendMessage(from, content, { quoted: mek })
+        if (type === 'imageMessage') {
+            await conn.sendMessage(from, { image: buffer, caption: "✅ View Once Opened" }, { quoted: mek })
+        } 
+        else if (type === 'videoMessage') {
+            await conn.sendMessage(from, { video: buffer, caption: "✅ View Once Opened" }, { quoted: mek })
+        } 
+        else if (type === 'audioMessage') {
+            await conn.sendMessage(from, { audio: buffer, mimetype: 'audio/mp4' }, { quoted: mek })
+        } 
+        else {
+            reply("*❌ Unsupported View Once type*")
+        }
 
     } catch (e) {
         console.log("VV ERROR:", e)
-        reply("*❌ VIEW ONCE OPEN KARNE ME ERROR AYA 🥺*")
+        reply("*❌ Error opening View Once*")
     }
 })
