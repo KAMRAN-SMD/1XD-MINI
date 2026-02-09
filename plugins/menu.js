@@ -95,7 +95,7 @@ cmd({
 
 ──────────────────────
 🔗 *Developer*  
-https://minidr-7100b4161de8.herokuapp.com/
+dr-mini-md-beta.vercel.app
 
 📢 *Support Channel*  
 https://whatsapp.com/channel/0029VbAhxYY90x2vgwhXJV3O
