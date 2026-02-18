@@ -1,5 +1,5 @@
 const config = require('../config')
-const { cmd } = require('../inconnuboy')
+const { cmd } = require('../command')
 
 async function getGroupAdmins(participants = []) {
     const admins = []
@@ -30,7 +30,7 @@ async function checkAdminStatus(conn, chatId, senderId) {
         const senderIdWithoutSuffix = senderId.includes('@') ? senderId.split('@')[0] : senderId;
         
         let isBotAdmin = false;
-        let isSenderAdmin = true;
+        let isSenderAdmin = false;
         
         for (let p of participants) {
             if (p.admin === "admin" || p.admin === "superadmin") {
@@ -92,7 +92,7 @@ cmd({
     alias: ["groupmute"],
     react: "🔇",
     desc: "Mute the group (Only admins can send messages).",
-    category: "isBotAdmins",
+    category: "group",
     filename: __filename
 },           
 async (conn, mek, m, { from, isGroup, isBotAdmins, reply }) => {
@@ -117,4 +117,4 @@ async (conn, mek, m, { from, isGroup, isBotAdmins, reply }) => {
         reply("❌ Failed to mute the group. Please try again.");
     }
 })
-                                                                             
+    
