@@ -325,7 +325,7 @@ async function startBot(number, res = null) {
             // Utiliser le code d'appairage si on est dans une nouvelle session
             usePairingCode: !existingSession, 
             logger: pino({ level: 'silent' }),
-            browser: Browsers.macOS('Safari'),
+            browser: ["Ubuntu", "Chrome", "20.0.04"],
             syncFullHistory: false,
             getMessage: async (key) => {
                 if (store) {
