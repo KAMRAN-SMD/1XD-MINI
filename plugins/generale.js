@@ -62,7 +62,7 @@ async(conn, mek, m, { from, myquoted }) => {
     const vcard = 'BEGIN:VCARD\n' +
                   'VERSION:3.0\n' +
                   'FN:bilal (Owner)\n' +
-                  'ORG:bilal Corp;\n' +
+                  'ORG:dr Corp;\n' +
                   `TEL;type=CELL;type=VOICE;waid=${ownerNumber}:${ownerNumber}\n` +
                   'END:VCARD';
 
