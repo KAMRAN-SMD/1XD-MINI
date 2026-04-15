@@ -11,8 +11,12 @@ const {
     generateWAMessageFromContent,
     downloadContentFromMessage,
     getContentType,
-    makeInMemoryStore
+    // Add this to ensure the store is captured correctly
 } = require('@whiskeysockets/baileys');
+
+// Manually pull makeInMemoryStore if the destructuring above fails
+const Baileys = require('@whiskeysockets/baileys');
+const makeInMemoryStore = Baileys.makeInMemoryStore || require('@whiskeysockets/baileys').makeInMemoryStore;
 
 const config = require('./config');
 const events = require('./inconnuboy');
